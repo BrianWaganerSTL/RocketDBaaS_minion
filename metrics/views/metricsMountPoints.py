@@ -14,7 +14,7 @@ def MountPointsList(request):
         for p in partitions:
             if (p.fstype):
                 count += 1
-                oneJson = '{"created_dttm":"%s","mount_point":"%s","allocated_gb":%d,"used_gb":%d,"used_pct":"%d"}' % \
+                oneJson = '{"created_dttm":"%s","mount_point":"%s","allocated_gb":%d,"used_gb":%d,"used_pct":%d}' % \
                          (str(timezone.now().replace(microsecond=0)), \
                           re.sub(':\\\\','',p.mountpoint), \
                           psutil.disk_usage(p.mountpoint).total / 1024 / 1024 / 1024, \
