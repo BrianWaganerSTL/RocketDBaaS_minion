@@ -1,0 +1,41 @@
+Staticists per environment
+
+```
+select * from pg_stat_activity
+```
+
+Statistics per database
+
+```
+select * from pg_stat_database
+```
+
+Hit Ratios
+
+```
+SELECT sum(heap_blks_read) as blocks_read, sum(heap_blks_hit) as blocks_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as hit_ratio
+FROM pg_statio_user_tables;
+```
+
+Current SQL's
+
+```
+select datname as name, pid, usename as username, application_name, backend_start, query_start, wait_event_type, wait_event, state, query
+from pg_stat_activity where state != 'idle' and query not like 'select * from pg_stat_activity %'
+```
+
+Slow Query Log files
+
+```
+# default location
+/var/lib/pgsql/data/pg_log/
+```
+
+Create User
+
+```
+psql
+  CREATE user metrics_user LOGIN PASSWORD 'secure_password';
+  GRANT CONNECT ON DATABASE postgres TO metrics_user;
+  GRANT USAGE ON SCHEMA public TO metrics_user;
+```

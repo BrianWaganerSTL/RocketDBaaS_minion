@@ -1,10 +1,11 @@
 from django.urls import path
 
-from metrics.views import metricsCpu, metricsMountPoints, metricsLoad, metricsDbTest
+from metrics.views import metricsCpu, metricsMountPoints, metricsLoad, metricsPingDb
 
 urlpatterns = [
     path('metrics/cpu', metricsCpu.CpuList),
-    path('metrics/dbTest', metricsDbTest.DbTestList),
+    path('metrics/pingdb', metricsPingDb.PingDbList),
+    # path('metrics/pingserver', metricsPingDb.PingDbList),  # Not needed since it's just a ping
     path('metrics/load', metricsLoad.LoadList),
-    path('metrics/mountPoints', metricsMountPoints.MountPointsList),
+    path('metrics/mountpoints', metricsMountPoints.MountPointsList),
 ]
