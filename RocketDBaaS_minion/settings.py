@@ -25,6 +25,7 @@ SECRET_KEY = 'PutInLocalSetting.pyFile'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Better to keep this in the local file
 ALLOWED_HOSTS = []
 
 
