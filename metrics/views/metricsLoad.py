@@ -19,5 +19,5 @@ def LoadList(request):
         else:
             # Make up values since Windows can't get them
             myJson = '{"created_dttm":"%s","load_1min":%d,"load_5min":%d,"load_15min":%d}' % \
-                     ((str(timezone.now().replace(microsecond=0))), randint(0, 30), randint(0, 15), randint(0, 9))
+                     ((str(timezone.now().replace(microsecond=0))), randint(13, 30), randint(9, 15), randint(3, 7))
             return HttpResponse(myJson)
