@@ -7,6 +7,7 @@ from django.utils import timezone
 
 
 def MountPointsList(request):
+    print(subprocess.call("df -h /opt/pgsql/data /opt/pgsql/logs /opt/pgsql/backups 2>/duv/null", shell=True))
     if request.method == 'GET':
         partitions = psutil.disk_partitions()
         myJson = []
@@ -25,4 +26,3 @@ def MountPointsList(request):
                 myJson.append(oneJson)
 
         return HttpResponse(myJson)
-
