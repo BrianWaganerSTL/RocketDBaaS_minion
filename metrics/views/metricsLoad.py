@@ -13,8 +13,8 @@ def LoadList(request):
             a = os.getloadavg()
             print(a)
 
-            myJson = '{"created_dttm":"%s","load1min":%d,"load5min":%d,"load15min":%d}' % \
-                     (str(timezone.now().replace(microsecond=0)), a)
+            myJson = '{"created_dttm":"%s","load_1min":%d,"load_5min":%d,"load_15min":%d}' % \
+                     (str(timezone.now().replace(microsecond=0)), a[0], a[1], a[2])
             return HttpResponse(myJson)
         else:
             # Make up values since Windows can't get them
