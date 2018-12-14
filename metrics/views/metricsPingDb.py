@@ -12,7 +12,7 @@ def PingDbList(request):
            ping_db_status = 'Normal'
            startTs = timezone.now()
            try:
-               conn = psycopg2.connect("dbname='postgres' user='metrics_user' host='localhost' password='secure_password' connect_timeout=1")
+               conn = psycopg2.connect("dbname='minion' user='minion' host='localhost' connect_timeout=.45")
                conn.close()
            except:
                ping_db_status = 'Critical'
@@ -27,7 +27,7 @@ def PingDbList(request):
            ping_db_status = 'Normal'
            startTs = timezone.now()
            try:
-               conn = psycopg2.connect("dbname='postgres' user='metrics_user' host='localhost' password='secure_password' connect_timeout=1")
+               conn = psycopg2.connect("dbname='minion' user='minion' host='localhost' connect_timeout=1")
                conn.close()
            except:
                ping_db_status = 'Blackout'
