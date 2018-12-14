@@ -123,6 +123,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 try:
-    from RocketDBaaS_minion.local_settings import *
+    from RocketDBaaS_minion.RocketDBaaS_minion_local_settings import *
 except ImportError:
     pass
