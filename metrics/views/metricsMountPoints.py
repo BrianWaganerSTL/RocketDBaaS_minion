@@ -1,3 +1,4 @@
+import platform
 import re
 
 import psutil
@@ -7,8 +8,10 @@ from django.utils import timezone
 
 
 def MountPointsList(request):
-    print(subprocess.call("df -h /opt/pgsql/data /opt/pgsql/logs /opt/pgsql/backups 2>/duv/null", shell=True))
+
     if request.method == 'GET':
+        if platform == "linux" or platform == "linux2":
+            print(subprocess.call("df -h /opt/pgsql/data /opt/pgsql/logs /opt/pgsql/backups 2>/duv/null", shell=True))
         partitions = psutil.disk_partitions()
         myJson = []
         count = 0
