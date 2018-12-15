@@ -12,9 +12,9 @@ def CpuList(request):
 
         if platform == "linux" or platform == "linux2":
             if len(a) == 8:
-                cpuDetails = '"user":%d,"nice":%s,"system":%d,"idle":%d,"iowait":%d,"irq":%d,"softirq":"%d,"steal":%d}' % a
+                cpuDetails = '"user":%d,"nice":%s,"system":%d,"idle":%d,"iowait":%d,"irq":%d,"softirq":%d,"steal":%d}' % a
             elif len(a) == 9:
-                cpuDetails = '"user":%d,"nice":%s,"system":%d,"idle":%d,"iowait":%d,"irq":%d,"softirq":"%d,"steal":%d,"guest":%d}' % a
+                cpuDetails = '"user":%d,"nice":%s,"system":%d,"idle":%d,"iowait":%d,"irq":%d,"softirq":%d,"steal":%d,"guest":%d}' % a
             elif len(a) == 10:
                 cpuDetails = '"user":%d,"nice":%s,"system":%d,"idle":%d,"iowait":%d,"irq":%d,"softirq":%d,"steal":%d,"guest":%d,"guest_nice":%d}' % a
 
