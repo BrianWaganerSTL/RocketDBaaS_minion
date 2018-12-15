@@ -1,7 +1,7 @@
 import psycopg2
 from django.http import HttpResponse
 from django.utils import timezone
-
+from RocketDBaaS_minion.settings import MINION_DB, MINION_USER, MINION_PWD, MINION_PORT
 
 def PingDbList(request):
     if request.method == 'GET':
@@ -12,9 +12,13 @@ def PingDbList(request):
            ping_db_status = 'Normal'
            startTs = timezone.now()
            try:
-               conn = psycopg2.connect("dbname='minion' user='minion' host='localhost' connect_timeout=.45")
+               conn = psycopg2.connect(dbname=MINION_DB, user=MINION_USER, password=MINION_PWD, host="localhost", port=MINION_PORT)
                conn.close()
-           except:
+           except psycopg2.Error as e:
+               print("Unable to connect!")
+               print(e.pgerror)
+               print(e.diag.message_primary)
+               print(e.diag.message_detail)
                ping_db_status = 'Critical'
            stopTs = timezone.now()
            myJson = '{"created_dttm":"%s","ping_db_status":"%s","ping_db_response_ms":%d}' % \
@@ -27,7 +31,7 @@ def PingDbList(request):
            ping_db_status = 'Normal'
            startTs = timezone.now()
            try:
-               conn = psycopg2.connect("dbname='minion' user='minion' host='localhost' connect_timeout=1")
+               conn = psycopg2.connect(dbname=MINION_DB, user=MINION_USER, password=MINION_PWD, host="localhost", port=MINION_PORT)
                conn.close()
            except:
                ping_db_status = 'Blackout'
