@@ -85,9 +85,9 @@ DATABASES = {
 
 # Overwrite in local file
 MINION_DB = 'minion_db'
-MINION_USER = 'minion'
-MINION_PWD = "xxxxxxxxxxx"
-MINION_PORT = "5432"
+MINION_DB_USER = 'minion'
+MINION_DB_PWD = "xxxxxxxxxxx"
+MINION_DB_PORT = "5432"
 
 
 # Password validation
@@ -129,6 +129,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 try:
-    from RocketDBaaS_minion.RocketDBaaS_minion_local_settings import *
+    from RocketDBaaS_minion.local_settings import *
 except ImportError:
     pass
