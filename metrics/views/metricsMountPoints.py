@@ -1,6 +1,4 @@
-import platform
 import re
-import subprocess
 
 import psutil
 
@@ -9,24 +7,21 @@ from django.utils import timezone
 
 
 def MountPointsList(request):
-
     if request.method == 'GET':
-        if platform == "linux" or platform == "linux2":
-            print(subprocess.call("df -h /opt/pgsql/data /opt/pgsql/logs /opt/pgsql/backups 2>/duv/null", shell=True))
         partitions = psutil.disk_partitions()
-        myJson = []
+        myJson = '['
         count = 0
         for p in partitions:
             if (p.fstype):
                 count += 1
-                oneJson = '{"created_dttm":"%s","mount_point":"%s","allocated_gb":%d,"used_gb":%d,"used_pct":%d}' % \
+                if (count > 1):
+                    myJson += ','
+                mntpoint = psutil.disk_usage(p.mountpoint)
+                myJson += '{"created_dttm":"%s","mount_point":"%s","allocated_gb":%d,"used_gb":%d,"used_pct":%d}' % \
                          (str(timezone.now().replace(microsecond=0)), \
-                          re.sub(':\\\\','',p.mountpoint), \
-                          psutil.disk_usage(p.mountpoint).total / 1024 / 1024 / 1024, \
-                          psutil.disk_usage(p.mountpoint).used / 1024 / 1024 / 1024, \
-                          psutil.disk_usage(p.mountpoint).percent)
-                if (count > 1 ):
-                    oneJson = oneJson + ','
-                myJson.append(oneJson)
-
+                          p.mountpoint, \
+                          mntpoint.total / 1024 / 1024 / 1024, \
+                          mntpoint.used / 1024 / 1024 / 1024, \
+                          mntpoint.percent)
+        myJson += ']'
         return HttpResponse(myJson)
