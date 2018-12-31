@@ -19,7 +19,7 @@ def HostDetailsList(request):
             ipAddress = socket.gethostbyname(socket.gethostname())
         elif osVersion == "Linux":
             import subprocess
-            ipAddress = subprocess.run("hostname","--ip-address", universal_newlines=True, stdout=subprocess.PIPE).stdout[:-1];
+            ipAddress = subprocess.run(["hostname","--ip-address"], universal_newlines=True, stdout=subprocess.PIPE).stdout[:-1];
         else:
             ipAddress=""
 
