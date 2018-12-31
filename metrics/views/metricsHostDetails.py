@@ -1,16 +1,6 @@
-import datetime
 from sys import platform
 import psutil
 
-
-# ipAddress
-# cpuCount
-# ramGb
-# dataDbGb
-# osVersion
-# dbVersion
-# lastServerRestart
-# lastDbRestart
 from django.http import HttpResponse
 from django.utils import timezone
 
@@ -28,8 +18,8 @@ def HostDetailsList(request):
             import socket
             ipAddress = socket.gethostbyname(socket.gethostname())
         elif osVersion == "Linux":
-            import commands
-            ipAddress = commands.getoutput("hostname --ip-address")
+            import subprocess
+            ipAddress = subprocess.run("hostname","--ip-address", universal_newlines=True, stdout=subprocess.PIPE).stdout[:-1];
         else:
             ipAddress=""
 
