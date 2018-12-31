@@ -2,6 +2,7 @@ import datetime
 from sys import platform
 import psutil
 
+
 # ipAddress
 # cpuCount
 # ramGb
@@ -11,22 +12,32 @@ import psutil
 # lastServerRestart
 # lastDbRestart
 from django.http import HttpResponse
+from django.utils import timezone
 
 
 def HostDetailsList(request):
     if request.method == 'GET':
-        cpuCount = psutil.cpu_count()
-
-        lastReboot = datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
-
-        ramGb = round(psutil.virtual_memory().total / 1024 /1024 / 1024)
-
         if platform == "linux" or platform == "linux2":
             osVersion = "Linux"
         elif platform == "darwin":
-            osVersion = "iOS"
+            osVersion = "Mac"
         elif platform == "win32":
             osVersion = "Windows"
+
+        if osVersion == "Windows":
+            import socket
+            ipAddress = socket.gethostbyname(socket.gethostname())
+        elif osVersion == "Linux":
+            import commands
+            ipAddress = commands.getoutput("hostname --ip-address")
+        else:
+            ipAddress=""
+
+        cpuCount = psutil.cpu_count()
+
+        lastReboot = timezone.datetime.fromtimestamp(psutil.boot_time()).astimezone()
+
+        ramGb = round(psutil.virtual_memory().total / 1024 /1024 / 1024)
 
         dbVersion = "?"
         # if (osVersion == "Linux"):
@@ -40,6 +51,7 @@ def HostDetailsList(request):
         #         except KeyError:
         #             dbVersion = "?"
 
-        myJson = '[{"cpuCount":%d,"lastReboot":"%s","ramGb":%d,"osVersion":"%s","dbVersion":"%s"}]' % (cpuCount, lastReboot, ramGb, osVersion, dbVersion)
+        myJson = '{"created_dttm":"%s","cpuCount":%d,"ipAddress":"%s","lastReboot":"%s","ramGb":%d,"osVersion":"%s","dbVersion":"%s"}'\
+                 % (str(timezone.now().replace(microsecond=0)), cpuCount, ipAddress, lastReboot, ramGb, osVersion, dbVersion)
         print('myJson=' + myJson)
         return HttpResponse(myJson)
