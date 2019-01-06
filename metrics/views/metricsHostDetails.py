@@ -44,30 +44,34 @@ def HostDetailsList(request):
             dbms_type = 'MongoDB'
 
         # ========================================================================
+        dbVersion = ''
+        dbVersionNumber = 0
         if (dbms_type == 'PostgreSQL'):
             try:
-                conn = psycopg2.connect(dbname=MINION_DB, user=MINION_DB_USER, password=MINION_DB_PWD, host="localhost", port=MINION_DB_PORT)
+                try:
+                    conn = psycopg2.connect(dbname=MINION_DB, user=MINION_DB_USER, port=MINION_DB_PORT)
+                except psycopg2.Error as e:
+                    print("Unable to connect!")
+                    print(e.pgerror)
+                    print(e.diag.message_primary)
+                    print(e.diag.message_detail)
+
+                cur = conn.cursor()
+                cur.execute("select current_setting('server_version'), current_setting('server_version_num')")
+                rows = cur.fetchall()
+                for row in rows:
+                    print('   '+ row[0] + ', ' + row[1])
+                    dbVersion = row[0]
+                    dbVersionNumber = row[1]
+                conn.close()
             except psycopg2.Error as e:
                 print("Unable to connect!")
                 print(e.pgerror)
                 print(e.diag.message_primary)
                 print(e.diag.message_detail)
 
-            cur = conn.cursor()
-            try:
-                cur.execute("select current_setting('server_version'), current_setting('server_version_num')")
-            except:
-                print("Can't select the DB versions")
-
-            rows = cur.fetchall()
-            for row in rows:
-                print('   '+ row[1][1] + ', ' + row[2][1])
-                dbVersion = row[1][1]
-                dbVersionNumber = row[2][1]
-            conn.close()
-
         # ========================================================================
-        myJson = '{"created_dttm":"%s","cpuCount":%d,"ipAddress":"%s","lastReboot":"%s","ramGb":%d,"dbGb":%d,"osVersion":"%s","dbVersion":"%s","dbVersionNumber":%d}'\
+        myJson = '{"created_dttm":"%s","cpuCount":%d,"ipAddress":"%s","lastReboot":"%s","ramGb":%d,"dbGb":%d,"osVersion":"%s","dbVersion":"%s","dbVersionNumber":%s}'\
                  % (str(timezone.now().replace(microsecond=0)), cpuCount, ipAddress, lastReboot, ramGb, dbGb, osVersion, dbVersion, dbVersionNumber)
         print('myJson=' + myJson)
         return HttpResponse(myJson)
