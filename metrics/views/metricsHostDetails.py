@@ -36,26 +36,28 @@ def HostDetailsList(request):
         ramGb = round(psutil.virtual_memory().total / 1024 /1024 / 1024)
 
         # ========================================================================
+        dbms_type = ''
+
         try:
             dbGb = round(psutil.disk_usage('/opt/pgsql/data').total / 1024 /1024 / 1024)
             dbms_type = 'PostgreSQL'
         except:
-            dbGb = round(psutil.disk_usage('/opt/mongodb/data').total / 1024 /1024 / 1024)
-            dbms_type = 'MongoDB'
+            try:
+                dbGb = round(psutil.disk_usage('/opt/mongodb/data').total / 1024 /1024 / 1024)
+                dbms_type = 'MongoDB'
+            except:
+                try:
+                    dbGb = round(psutil.disk_usage('C:\PostgreSQL\data\pg10').total / 1024 / 1024 / 1024)
+                    dbms_type = 'PostgreSQL'
+                except:
+                    pass
 
         # ========================================================================
         dbVersion = ''
         dbVersionNumber = 0
         if (dbms_type == 'PostgreSQL'):
             try:
-                try:
-                    conn = psycopg2.connect(dbname=MINION_DB, user=MINION_DB_USER, port=MINION_DB_PORT)
-                except psycopg2.Error as e:
-                    print("Unable to connect!")
-                    print(e.pgerror)
-                    print(e.diag.message_primary)
-                    print(e.diag.message_detail)
-
+                conn = psycopg2.connect(dbname=MINION_DB, user=MINION_DB_USER, port=MINION_DB_PORT)
                 cur = conn.cursor()
                 cur.execute("select current_setting('server_version'), current_setting('server_version_num')")
                 rows = cur.fetchall()
@@ -66,9 +68,7 @@ def HostDetailsList(request):
                 conn.close()
             except psycopg2.Error as e:
                 print("Unable to connect!")
-                print(e.pgerror)
-                print(e.diag.message_primary)
-                print(e.diag.message_detail)
+                print(str(e))
 
         # ========================================================================
         myJson = '{"created_dttm":"%s","cpuCount":%d,"ipAddress":"%s","lastReboot":"%s","ramGb":%d,"dbGb":%d,"osVersion":"%s","dbVersion":"%s","dbVersionNumber":%s}'\

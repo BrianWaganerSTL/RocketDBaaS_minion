@@ -15,9 +15,7 @@ def PingDbList(request):
                 conn.close()
             except psycopg2.Error as e:
                 print("Unable to connect!")
-                print(e.pgerror)
-                print(e.diag.message_primary)
-                print(e.diag.message_detail)
+                print(str(e))
                 ping_db_status = 'Critical'
             stopTs = timezone.now()
             myJson = '{"created_dttm":"%s","ping_db_status":"%s","ping_db_response_ms":%d}' % \
