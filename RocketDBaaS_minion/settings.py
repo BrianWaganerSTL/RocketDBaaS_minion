@@ -129,7 +129,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 try:
-    from RocketDBaaS_minion.local_settings import *
+    from RocketDBaaS_minion.settings_local import *
 except ImportError:
     print('ERROR: Cannot find your local_settings.py file!  For security purposes you should always have one.')
     pass
