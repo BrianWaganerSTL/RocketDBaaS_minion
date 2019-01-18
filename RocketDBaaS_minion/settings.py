@@ -131,5 +131,5 @@ STATIC_URL = '/static/'
 try:
     from RocketDBaaS_minion.settings_local import *
 except ImportError:
-    print('ERROR: Cannot find your local_settings.py file!  For security purposes you should always have one.')
+    print('ERROR: Cannot find your settings_local.py file!  For security purposes you should always have one.')
     pass
